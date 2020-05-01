@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <title>Balloon</title>
+</head>
+<body>
+    <p>You can play in 2 or more by turns and inflate the baloon until it randomly explodes.</p>
+    <p id='level'>&nbsp;</p>
+    <button class="btn btn-success btn-lg mx-2 my-5" data-value="ArrowDown"><i class="fas fa-chevron-down" data-value="ArrowDown"></i></button>
+    <button class="btn btn-danger btn-lg mx-2 my-5" data-value="ArrowUp"><i class="fas fa-chevron-up" data-value="ArrowUp"></i></button>  
+    <h3 id="balloon">🎈</h3>
+    <script type="text/javascript">
+        const balloon = document.getElementById('balloon');
+        const buttons = document.querySelectorAll('button');
+        const icons = document.querySelectorAll('button i');
+        const levelEl = document.getElementById('level');
+        let level = 1;
+
+        balloon.style.fontSize = '20px';
+        [...buttons].forEach((button) => button.addEventListener('mousedown', transformBalloon));
+        [...icons].forEach((icon) => icon.addEventListener('mousedown', transformBalloon));
+        const inflate = document.body.addEventListener('keydown', transformBalloon);
+
+        function transformBalloon(event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            const option = (event.key) ? event.key : event.target.getAttribute('data-value');
+            if (option === 'ArrowDown') balloon.style.fontSize = String(+balloon.style.fontSize.substr(0, balloon.style.fontSize.length - 2) - 10) + 'px';
+            else if (option === 'ArrowUp') balloon.style.fontSize = String(+balloon.style.fontSize.substr(0, balloon.style.fontSize.length - 2) + 10) + 'px';
+            
+            let randomNumber = Math.floor(Math.random() * (900 - 120 + 1)) + 120;
+            if (+balloon.style.fontSize.substr(0, balloon.style.fontSize.length - 2) > randomNumber) {
+                balloon.textContent = '💥';
+                document.body.removeEventListener('keydown', transformBalloon);
+                [...buttons].forEach((button) => button.removeEventListener('mousedown', transformBalloon));
+            }
+
+            levelEl.textContent = level;
+            level++;
+        }
+    </script>
+</body>
+</html>
