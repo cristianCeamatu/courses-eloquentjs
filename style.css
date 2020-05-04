@@ -72,8 +72,40 @@ ul {
     }
 }
 
+/* Mouse trail exercise */
 .trail { /* className for trail elements */
     position: absolute;
     height: 6px; width: 6px;
     border-radius: 3px;
   }
+
+/* Tabs exercise */
+tab-panel div {
+    width: 100%;
+    height: 150px;
+    padding: 30px;
+    display: none;
+    text-align: center;
+}
+
+tab-panel ul.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+}
+
+tab-panel ul.buttons li:not(:last-child) {
+    margin-right: 15px;
+}
+
+.buttons .active {
+    background: #fefefe!important;
+    border: 1px solid #616161!important;
+}
+
+div.active {
+    display: block!important;
+    background: #fefefe;
+    border: 1px solid #616161;
+}

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <title>Eloquent JS Tabs exercise</title>
+</head>
+<body>
+    <section class="showcase">
+        <h3>Eloquent JS Tabs exercise</h3>
+        <tab-panel>
+            <div class="active" data-tabname="one">Tab one</div>
+            <div data-tabname="two">Tab two</div>
+            <div data-tabname="three">Tab three</div>
+          </tab-panel>
+    </section>
+    <script>
+        function asTabs(node) {
+          // Your code here.
+          const tabs = [...node.children];
+
+          const ul = document.createElement('ul');
+          ul.className = 'buttons';
+          const tabPanelContainer = document.querySelector('tab-panel');
+          tabPanelContainer.insertBefore(ul, tabPanelContainer.childNodes[0]);
+
+          tabs.forEach((tab) => {
+            const li = document.createElement('li');
+            li.classList.add('btn', 'btn-warning');
+            li.textContent = tab.getAttribute('data-tabname');
+            li.addEventListener('click', changeTab);
+            ul.appendChild(li);
+          })
+
+          ul.childNodes[0].classList.add('active');
+        }
+
+        function changeTab(event) {
+            const clicked =  event.target;
+            [...document.querySelectorAll('.active')].forEach((el) => el.classList.remove('active'));
+            clicked.classList.add('active');
+            document.querySelector(`div[data-tabname=${clicked.textContent}]`).classList.add('active');
+        }
+
+        asTabs(document.querySelector("tab-panel"));
+    </script>
+</body>
+</html>
