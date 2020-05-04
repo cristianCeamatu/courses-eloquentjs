@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta 
+     name='viewport' 
+     content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' />
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Mouse trail</title>
+</head>
+<body>
+    <div class="background"></div>
+    <main class="showcase">
+        <header>
+            <h1 class="text-center text-monospace text-uppercase">Etch a sketch project</h1>
+            <ul class="sketch-options mb-0 py-4 px-1">
+                <li class="sketch-option shadow"><button class="btn btn-dark" id="black">Black</button></li>
+                <li class="sketch-option shadow"><button class="btn btn-warning" id="random">Random</button></li>
+                <li class="sketch-option shadow"><button class="btn btn-secondary" id="percent-increase">Percent increase</button></li>
+                <li class="sketch-option shadow"><button class="btn btn-danger" id="reset" value="16">Reset</button></li>
+                <li class="sketch-option shadow rounded bg-light" id="set-size">Size <input type="number" name="size" id="size" value=80 min="30" max="100"></li>
+            </ul>
+        </header>
+        <section id="trail"></section>
+        <footer class="badge badge-light text-wrap mt-3 p-3">
+            <p id="curent-theme">Curent coloring theme: <span id="theme">BLACK</span></p> 
+            <p class="mb-0" id="curent-trail">Curent trail size: <span id="trail-size">16</span></p> 
+        </footer>
+    </main>
+
+    <script type="text/javascript">
+
+// Get elements
+const trailContainer = document.getElementById('trail');
+const themeContainer = document.getElementById('theme');
+const trailSizeContainer = document.getElementById('trail-size');
+const buttons = document.querySelectorAll('button');
+
+// Initial state and necesary variables
+let size = document.getElementById('size').value;
+let theme = 'black';
+let color = 'black';
+let opacity = 1;
+let counter = 0; // We use the counter for the trail size
+let trails;
+
+// Populate the grid with initial state
+drawTrail(size);
+
+// Event listeners
+const trailListener = document.body.addEventListener('mousemove', setTrail);
+const buttonsListener = [...buttons].forEach((button) => button.addEventListener('click', setTheme));
+const changeSizeListener = document.querySelector('input#size').addEventListener('change', drawTrail);
+
+function setTrail(event) {
+    setDesign(theme);
+    // + 25 so we can click on button on the page
+    trails[counter].style.top = `${event.clientY + 25}px`;
+    trails[counter].style.left = `${event.clientX}px`;
+    trails[counter].style.backgroundColor = color;
+    trails[counter].style.opacity = opacity;
+    counter++;
+    //Because indexes in array start from 0 and end at length - 1
+    if (counter > size - 1) {
+        counter = 0;
+    }
+}
+
+function drawTrail(trailSize) {
+    // When the trailSize comes from an input change
+    if (trailSize.target) size = trailSize.target.value;
+    trailSizeContainer.textContent = size;
+    themeContainer.textContent = theme;
+    trailContainer.innerHTML = '';
+
+    for (let i = 0; i < size; i++) {
+        const div = document.createElement('div');
+        div.className = 'trail';
+        div.style.backgroundColor = theme;
+        trailContainer.appendChild(div);
+    }
+    trails = [...document.querySelectorAll('.trail')];
+}
+
+function setTheme(event) {
+    theme = (event.target.id === 'reset') ? 'black' : event.target.id; 
+    themeContainer.textContent = theme;
+}
+
+function setDesign(theme) {
+    if (theme === 'random') {
+        color = getRandomColor();
+        opacity = 1;
+    } else if (theme === 'percent-increase') {
+        color = 'black';
+        opacity = counter / 100;
+    } else {
+        color = 'black';
+        opacity = 1;
+    }
+}
+
+function getRandomColor() {
+    return "#"+((1<<24)*Math.random()|0).toString(16);
+}
+
+
+
+    </script>
+</body>
+</html>
